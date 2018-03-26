@@ -103,11 +103,14 @@ export default class Movies extends Component {
         
         var header = document.getElementById("listGenres");
         var btns = header.getElementsByClassName("dropdown-item");
-
+        document.getElementsByClassName("nav-link active")[0].className="nav-link";
         for (var i = 0; i < btns.length; i++) {  
                 btns[i].className="dropdown-item";  
         }
-          
+
+        if(document.getElementById("dropdownGenres").classList.length!==3){
+            document.getElementById("dropdownGenres").className  += " active"; 
+        }
         e.target.className += " active";  
     }
     
@@ -121,6 +124,7 @@ export default class Movies extends Component {
         for (var i = 0; i < btns.length; i++) {  
             if(btns[i].classList[0] === "dropdown-toggle" ){
                 btns[i].className="dropdown-toggle nav-link";  
+                console.log(btns[i].className);
             }              
             else{
                 btns[i].className="nav-link";  

@@ -55,7 +55,7 @@ export default class Filter extends Component {
                       <a href="#" className="nav-link" onClick={(e)=>getListMovieKind('top_rated',e)}>Top Rated</a>
                       <a href="#" className="nav-link" onClick={(e)=>getListMovieKind('upcoming',e)}>Upcoming</a>      
                       <div className=" dropdown">
-                        <a className="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Genre</a>
+                        <a id="dropdownGenres" className="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Genre</a>
                         <div id="listGenres" className="dropdown-menu">
                             {this.state.genres}
                           <button className="dropdown-item" onClick={(e)=>getMovieGenre(80,e)} >Action 009</button>
