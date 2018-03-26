@@ -4,7 +4,7 @@ export default class Movie extends Component {
     constructor(){
         super();
     }
-    
+
     render() {        
         const {original_title, release_date ,genres ,vote_average ,poster_path } = this.props;
         const listGenres = genres.map((x,index)=> { if(index !== 0) return(", "+x); return (x)})
@@ -13,7 +13,7 @@ export default class Movie extends Component {
                 <div className="card item-movie">
                     <div className="card-img-top">
                         <img className="img-fluid" src={"https://image.tmdb.org/t/p/original"+poster_path} alt="Card image cap"/>
-                        <span className="year">{release_date}</span>
+                        <span className="year">{new Date(release_date).getFullYear()}</span>
                     </div>
 
                     <div className="card-body">

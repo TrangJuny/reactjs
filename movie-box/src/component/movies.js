@@ -11,7 +11,8 @@ export default class Movies extends Component {
             data: [],
             genres: [],
             numPage:1,
-            type:null,
+            nextHref:'',
+            type:'popular',
             hasMoreItems:false
         };
         this.listGenres=this.listGenres.bind(this);
@@ -33,49 +34,57 @@ export default class Movies extends Component {
 
     getListMovie(){
 
-        var type = "popular";
+        alert("type:"+this.state.type)
 
-        if(this.state.type) {
-            type = this.state.type;
-        }
+        const type = this.state.type;
 
-        var listMovie = this.state.data;
+        var num =this.state.numPage;
+        var listMovie= this.state.data;
 
-        const myRequest = getData(type,this.state.numPage);
-
+        const myRequest = getData(type,num);
+            
             fetch(myRequest)
             .then(x=>{return x.json();})
-            .then(dataJson=>{
-                let dt=dataJson.results.map(x=>{
-                    return(       
-                        <Movie key={"id_"+x.id}
-                            original_title={x.original_title}
-                            release_date={x.release_date}
-                            genres={this.listGenres(x.genre_ids)}
-                            vote_average={x.vote_average}
-                            poster_path={x.poster_path}
-                        ></Movie>
-                    )
-                })
-                
+            .then(dataJson=>{                         
+                                                
+                    if(this.state.hasMoreItems && dataJson.page===this.state.numPage){  
+                        let id=listMovie.length;
+                        let dt=dataJson.results.map(x=>{
+                            id++;
+                                listMovie.push(    
+                                <Movie key={"id_"+x.id+id}
+                                    original_title={x.original_title}
+                                    release_date={x.release_date}
+                                    genres={this.listGenres(x.genre_ids)}
+                                    vote_average={x.vote_average}
+                                    poster_path={x.poster_path}
+                                ></Movie>
+                                );
+                        })  
+                        // alert(dataJson.page===this.state.numPage)
 
-                if(this.state.hasMoreItems){
-                    
-                    listMovie=listMovie.concat(dt);
-                     
-                    this.setState({data: listMovie, numPage:this.state.numPage+1})  
-
-                    if(this.state.numPage===dataJson.total_pages){
-                        this.setState({hasMoreItems:false});                        
+                        this.setState({data: listMovie})                         
+                        this.setState({numPage:dataJson.page+1});  
+                        if(dataJson.page===dataJson.total_pages){
+                            this.setState({hasMoreItems:false});                        
+                        }
+                    }else{
+                        listMovie=[];
                     }
 
-                }
+                
             })
+            .catch(error=>{
+                alert(error)
+            })
+
     }
     
     getMovieGenre(num,e){
         if(e){e.preventDefault();}
         
+        this.setState({type:'',numPage:1,hasMoreItems:false,data:[]},);
+
         const myRequest = getDataGenre(num);
         fetch(myRequest)
         .then(x=>{return x.json();})
@@ -127,7 +136,7 @@ export default class Movies extends Component {
 
                 <div className="movies">  
                         <InfiniteScroll
-                            pageStart={1}
+                            pageStart={0}
                             loadMore={this.getListMovie}
                             hasMore={this.state.hasMoreItems}
                             loader={
@@ -143,15 +152,11 @@ export default class Movies extends Component {
                                     <h4>LOADING</h4>                    
                                 </div>
                             }
-                        >
-                                                  
+                        >                                                  
                             <div className="row"> 
                                     {this.state.data}
                             </div>
                         </InfiniteScroll>
-                        
-            
-                    
                 </div>     
             </div>
         )
