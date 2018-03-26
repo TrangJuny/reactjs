@@ -13,7 +13,7 @@ export default class Movies extends Component {
             numPage:1,
             nextHref:'',
             type:'popular',
-            hasMoreItems:false
+            hasMoreItems:true
         };
         this.listGenres=this.listGenres.bind(this);
         this.getListMovie=this.getListMovie.bind(this);
@@ -32,52 +32,50 @@ export default class Movies extends Component {
 
     }
 
-    getListMovie(){
-
-        alert("type:"+this.state.type)
+    getListMovie(){        
+        document.getElementById("watting").style.display="block";
 
         const type = this.state.type;
-
         var num =this.state.numPage;
         var listMovie= this.state.data;
+        const myRequest = getData(type,num);   
 
-        const myRequest = getData(type,num);
-            
-            fetch(myRequest)
-            .then(x=>{return x.json();})
-            .then(dataJson=>{                         
-                                                
-                    if(this.state.hasMoreItems && dataJson.page===this.state.numPage){  
-                        let id=listMovie.length;
-                        let dt=dataJson.results.map(x=>{
-                            id++;
-                                listMovie.push(    
-                                <Movie key={"id_"+x.id+id}
-                                    original_title={x.original_title}
-                                    release_date={x.release_date}
-                                    genres={this.listGenres(x.genre_ids)}
-                                    vote_average={x.vote_average}
-                                    poster_path={x.poster_path}
-                                ></Movie>
-                                );
-                        })  
-                        // alert(dataJson.page===this.state.numPage)
+        fetch(myRequest)
+        .then(x=>{return x.json();})
+        .then(dataJson=>{                         
+                                            
+                if(this.state.hasMoreItems && dataJson.page===this.state.numPage){  
+                    let id=listMovie.length;
+                    let dt=dataJson.results.map(x=>{
+                        id++;
+                            listMovie.push(    
+                            <Movie key={"id_"+x.id+id}
+                                original_title={x.original_title}
+                                release_date={x.release_date}
+                                genres={this.listGenres(x.genre_ids)}
+                                vote_average={x.vote_average}
+                                poster_path={x.poster_path}
+                            ></Movie>
+                            );
+                    })  
+                    // alert(dataJson.page===this.state.numPage)
 
-                        this.setState({data: listMovie})                         
-                        this.setState({numPage:dataJson.page+1});  
-                        if(dataJson.page===dataJson.total_pages){
-                            this.setState({hasMoreItems:false});                        
-                        }
-                    }else{
-                        listMovie=[];
+                    this.setState({data: listMovie})                         
+                    this.setState({numPage:dataJson.page+1});  
+                    if(dataJson.page===dataJson.total_pages){
+                        this.setState({hasMoreItems:false});                        
                     }
+                }else{
+                    listMovie=[];
+                }
 
-                
-            })
-            .catch(error=>{
-                alert(error)
-            })
+            
+        })
+        .catch(error=>{
+            console.log(error)
+        })
 
+        document.getElementById("watting").style.display="none";
     }
     
     getMovieGenre(num,e){
@@ -102,12 +100,35 @@ export default class Movies extends Component {
             })
             return this.setState({data: dt,hasMoreItems:false});
         })
+        
+        var header = document.getElementById("listGenres");
+        var btns = header.getElementsByClassName("dropdown-item");
+
+        for (var i = 0; i < btns.length; i++) {  
+                btns[i].className="dropdown-item";  
+        }
+          
+        e.target.className += " active";  
     }
     
     getListMovieKind(kind,e){
         if(e){e.preventDefault();}
-        this.setState({type:kind,numPage:1,hasMoreItems:true,data:[]},);
-        this.getListMovie();
+        this.setState({type:kind,numPage:1,hasMoreItems:true,data:[]});
+            
+        var header = document.getElementById("filter");
+        var btns = header.getElementsByClassName("nav-link");
+
+        for (var i = 0; i < btns.length; i++) {  
+            if(btns[i].classList[0] === "dropdown-toggle" ){
+                btns[i].className="dropdown-toggle nav-link";  
+            }              
+            else{
+                btns[i].className="nav-link";  
+            }
+        }
+          
+        e.target.className += " active";  
+
     }
 
     componentDidMount() {
@@ -120,7 +141,6 @@ export default class Movies extends Component {
                    
         })
         this.getListMovie();
-        this.setState({hasMoreItems:true})
         
     }
 

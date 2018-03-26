@@ -45,19 +45,18 @@ export default class Filter extends Component {
         return newGenres1;
     }
 
-
     render() {
         const {getListMovieKind,getMovieGenre} = this.props;
         return(
             <div className="tab-primary">
                 <ul className="nav nav-tabs flex-column flex-sm-row">
-                    <li className="nav-item d-flex  flex-column flex-sm-row">
-                      <button className="nav-link active" onClick={(e)=>getListMovieKind('popular',e)} >Popular</button>
+                    <li id="filter" className="nav-item d-flex  flex-column flex-sm-row">
+                      <a href="#" className="nav-link active" onClick={(e)=>getListMovieKind('popular',e)} >Popular</a>
                       <a href="#" className="nav-link" onClick={(e)=>getListMovieKind('top_rated',e)}>Top Rated</a>
                       <a href="#" className="nav-link" onClick={(e)=>getListMovieKind('upcoming',e)}>Upcoming</a>      
                       <div className=" dropdown">
-                        <a className="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Genre</a>
-                        <div className="dropdown-menu">
+                        <a className="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Genre</a>
+                        <div id="listGenres" className="dropdown-menu">
                             {this.state.genres}
                           <button className="dropdown-item" onClick={(e)=>getMovieGenre(80,e)} >Action 009</button>
                         </div>

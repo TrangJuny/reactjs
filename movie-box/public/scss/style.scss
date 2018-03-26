@@ -33,6 +33,7 @@ body{
     box-shadow:none;
   }
 }
+
 ul{
   margin:0;
   padding:0;
@@ -52,6 +53,10 @@ img{
     box-shadow:none;
   }
 }
+.dropdown-item{
+  color: $color-text;
+  font-size: 1.6rem;
+}
 
 .font-14{
   font-size:1.4rem;
@@ -59,7 +64,6 @@ img{
 
 .container-slider{
   font-size:1.6rem;
-  min-height:70rem;
   
   .carousel-indicators{
     bottom:.5rem;
@@ -322,6 +326,7 @@ footer{
 		height:70%;
 	}
 }
+
 .loading-container{
   margin-top: 3rem;
   margin-bottom: 3rem;
@@ -403,4 +408,14 @@ footer{
       width:4rem;
     }    
   }
+}
+
+.watting-page{
+  position: fixed;
+  width: 100vh;
+  height: 100vh;
+  display: none;
+  top:0; 
+  left:0;
+  background-color: rgba(255, 255, 255, 1);
 }
